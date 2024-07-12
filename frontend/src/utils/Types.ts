@@ -35,3 +35,8 @@ export type DB_ESTIMATE = {
     materialId : number,
     tax: number
 };
+
+export type LoginParams = {
+    username: string;
+    password: string;
+}

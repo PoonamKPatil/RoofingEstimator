@@ -60,7 +60,6 @@ const ManageEstimate: React.FC = () => {
     setTotalEstimatedCosts(initialTotalEstimatedCosts);
     setErrors({});
     setDisableSave(false);
-    localStorage.removeItem('token');
   }
 
   const validateFields = () => {
@@ -103,7 +102,6 @@ const ManageEstimate: React.FC = () => {
   const saveEstimate = async () => {
     try {
         const saveResponse = await postEstimate(estimate);
-        localStorage.setItem('token', saveResponse.token);
         setMessage('Estimate Saved');
         setSeverity('success');
         setOpen(true);

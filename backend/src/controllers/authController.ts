@@ -35,7 +35,7 @@ export const login = async (req: Request, res: Response) => {
     //get the hashedPassword from result
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(400).send('Invalid username or password');
+        return res.status(401).send('Invalid username or password');
     }
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
     res.send({ token });
