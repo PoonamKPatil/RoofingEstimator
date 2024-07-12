@@ -10,11 +10,11 @@ export const postEstimate = async (estimate:ESTIMATE) => {
     }
 }
 
-export const getEstimateByToken = async () => {
+export const getEstimateByToken = async (token:string) => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL+'estimate'}`, {
             headers: {
-                Authorization : localStorage.getItem('token')
+                Authorization : token
             }
         });
         // console.log(response)

@@ -51,6 +51,7 @@ export const updateMaterial = async (req: Request, res: Response) => {
     const materialUpdateResponse = await materialRepository.save(material)
     res.status(200).json(materialUpdateResponse);
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 };

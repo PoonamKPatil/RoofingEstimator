@@ -7,7 +7,7 @@ const routeList =  [
       component: ManageEstimate,
     },
     {
-      path: '/estimate',
+      path: '/estimate/:token?',
       component: EstimatePage,
     },
 ];

@@ -27,26 +27,9 @@ const ManageEstimate: React.FC = () => {
     totalEstimateWithTax: 0
   };
 
-  const [estimate, setEstimate] = useState<ESTIMATE>({
-    roofSquareFootage : 0,
-    pitch : 0,
-    bundleCoverage : 0,
-    wastePercentage : 0,
-    laborRate : 0,
-    materialId : 1,
-    estimatedHour : 0,
-    tax: 10,
-  });
+  const [estimate, setEstimate] = useState<ESTIMATE>(initialEstimate);
 
-  const [totalEstimatedCosts, setTotalEstimatedCosts] = useState<TOTALESTIMATE>({
-    totalArea : 0,
-    shinglesBundlesNeeded : 0,
-    nailBoxesNeeded : 0,
-    laborCost : 0,
-    materialCost : 0,
-    taxAmount : 0,
-    totalEstimateWithTax : 0
-  });
+  const [totalEstimatedCosts, setTotalEstimatedCosts] = useState<TOTALESTIMATE>(initialTotalEstimatedCosts);
 
   const [materials, setMaterials] = useState<MATERIAL>([{id: 1, type : '', coveragePerUnit: 0}]);
   const [errors, setErrors] = useState<{[key:string]: boolean}>({});

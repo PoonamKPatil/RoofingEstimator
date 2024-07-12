@@ -6,7 +6,7 @@ import appDataSource from '../../config/database';
 import { ESTIMATE } from '../utils/types';
 
 export const createEstimate = async (req: Request, res: Response) => {
-  const {roofSquareFootage, pitch, bundleCoverage, wastePercentage, laborRate, tax, materialId, estimatedHour} = req.body.estimate as ESTIMATE;
+  const {roofSquareFootage, pitch, bundleCoverage, wastePercentage, laborRate, tax, materialId, estimatedHour} = req.body as ESTIMATE;
   try {
     //get repositories
     const materialRepository = appDataSource.getRepository(Material);
