@@ -11,12 +11,10 @@ export const createEstimate = async (req: Request, res: Response) => {
     //get repositories
     const materialRepository = appDataSource.getRepository(Material);
     const estimateRepository = appDataSource.getRepository(Estimate);
-  
     //find material by id
     const material = await materialRepository.findOneBy({
       id: materialId,
     });
-  
     if (!material) return res.status(404).send('Material not found');
   
     //create estimate
@@ -29,16 +27,14 @@ export const createEstimate = async (req: Request, res: Response) => {
     estimate.tax = tax;
 
     estimate.material = material;
-  
+
     const estimateCreateResponse = await estimateRepository.save(estimate);
-  
     //create JWT token
     const payload = {
       estimateId : estimateCreateResponse.id
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: '1h' });
-    
-    res.send({ message: "Estimate created", token });
+    res.status(201).send({ message: "Estimate created", token });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

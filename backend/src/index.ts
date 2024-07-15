@@ -18,12 +18,12 @@ app.use(routes);
 const swaggerSpecs = swaggerJsdoc(swaggerDefinition);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
-
+let server: any;
 //initialize connection and server
 appDataSource.initialize()
 .then(() => {
   console.log("Data Source has been initialized!")
-  app.listen(PORT, () => {
+  server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 })
@@ -31,4 +31,4 @@ appDataSource.initialize()
   console.error("Error during Data Source initialization", error)
 });
 
-export default app;
+export {app, server};
