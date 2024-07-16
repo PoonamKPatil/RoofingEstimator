@@ -61,7 +61,7 @@ describe('estimates', () => {
     expect(response.body).toEqual({message: "Estimate created", token: "fake-jwt-token"});
   });
 
-  test('should return created estimate', async () => {
+  test('should return estimate', async () => {
     const verifyMock = jwt.verify as jest.Mock;
     verifyMock.mockReturnValue({estimateId: 1, exp: 1});
 

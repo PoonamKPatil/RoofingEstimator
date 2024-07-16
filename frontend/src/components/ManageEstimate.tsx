@@ -4,6 +4,7 @@ import { postEstimate } from "../services/estimate";
 import { getMaterials } from "../services/material";
 import { getTotalEstimatedCosts } from "../utils/estimate";
 import { ESTIMATE, MATERIAL, TOTALESTIMATE } from "../utils/Types";
+import ModelPageForToken from "./ModelPageForToken";
 
 const ManageEstimate: React.FC = () => {
   const initialEstimate: ESTIMATE = {
@@ -37,6 +38,12 @@ const ManageEstimate: React.FC = () => {
   const [severity, setSeverity] = useState<'success' | 'error'>();
   const [open, setOpen] = useState<boolean>(false);
   const [disableSave, setDisableSave] = useState<boolean>(true);
+  const [token, setToken] = useState<string>('');
+
+
+  //token modal
+  const [openModal, setOpenModal] = useState(false);
+  const handleCloseModal = () => setOpenModal(false);
 
   const onChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -101,16 +108,18 @@ const ManageEstimate: React.FC = () => {
 
   const saveEstimate = async () => {
     try {
-        const saveResponse = await postEstimate(estimate);
-        setMessage('Estimate Saved');
-        setSeverity('success');
-        setOpen(true);
-        setDisableSave(true);
+      const response = await postEstimate(estimate);
+      setToken(response.token)
+      setMessage('Estimate Saved');
+      setSeverity('success');
+      setOpen(true);
+      setDisableSave(true);
+      setOpenModal(true);
     } catch (error) {
-        setOpen(true);
-        setSeverity('error');
-        setMessage('Error While saving estimate');
-        console.error('Error saving materials:', error);
+      setOpen(true);
+      setSeverity('error');
+      setMessage('Error While saving estimate');
+      console.error('Error saving materials:', error);
     }
   }
 
@@ -322,6 +331,10 @@ const ManageEstimate: React.FC = () => {
             </Typography>
           </Grid>
           <Grid container rowSpacing={1} columnGap={5} sx={{ display: 'flex', justifyContent: 'center', alignContent:'center', mt : 2}}>
+              <ModelPageForToken
+              openModal={openModal} handleCloseModal={handleCloseModal}
+              text={token}
+              />
               <Button
                 variant="contained"
                 size="medium"
