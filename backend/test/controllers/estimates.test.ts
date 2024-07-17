@@ -23,10 +23,13 @@ describe('estimates', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+  beforeAll(() => {
+    server.close();
+  });
   afterAll(() => {
     server.close();
   });
-  test('should return created estimate', async () => {
+  test('should return token after successfullly creating estimate', async () => {
     const signMock = jwt.sign as jest.Mock;
     signMock.mockReturnValue('fake-jwt-token');
 
@@ -51,9 +54,9 @@ describe('estimates', () => {
       save: jest.fn().mockResolvedValue(mockEstimate),
     };
 
-    (appDataSource.getRepository as jest.Mock)
-      .mockImplementationOnce(() => materialRepository)
-      .mockImplementationOnce(() => estimateRepository);
+    const dataSource = appDataSource.getRepository as jest.Mock;
+    dataSource.mockImplementationOnce(() => materialRepository);
+    dataSource.mockImplementationOnce(() => estimateRepository);
 
     const response = await request(app).post('/estimate').send(estimate);
 
@@ -74,6 +77,21 @@ describe('estimates', () => {
     dataSource.mockImplementationOnce(() => estimateRepository);
 
     const response = await request(app).get('/estimate').set('Authorization', 'Bearer fake-jwt-token');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockEstimate);
+  });
+
+  test('should return estimate by passing id', async () => {
+    const mockEstimate = { id: 1 };
+    const estimateRepository = {
+      findOneBy: jest.fn().mockResolvedValue(mockEstimate),
+    };
+
+    const dataSource = appDataSource.getRepository as jest.Mock;
+    dataSource.mockImplementationOnce(() => estimateRepository);
+
+    const response = await request(app).get(`/estimate/${mockEstimate.id}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockEstimate);

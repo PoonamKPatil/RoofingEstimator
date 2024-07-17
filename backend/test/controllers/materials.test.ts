@@ -25,6 +25,9 @@ describe('getMaterials', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
+    beforeAll(() => {
+        server.close();
+    });
     afterAll(() => {
         server.close();
     });
@@ -46,5 +49,42 @@ describe('getMaterials', () => {
         expect(response.body).toEqual(mockMaterials);
         expect(appDataSource.getRepository).toHaveBeenCalledWith(Material);
         expect(findMock).toHaveBeenCalledTimes(1);
+    });
+
+
+    test('should return material by passing id', async () => {
+        const mockMaterial = { id: 1 };
+        const materialRepository = {
+        findOneBy: jest.fn().mockResolvedValue(mockMaterial),
+        };
+
+        const dataSource = appDataSource.getRepository as jest.Mock;
+        dataSource.mockImplementationOnce(() => materialRepository);
+
+        const response = await request(app).get(`/materials/${mockMaterial.id}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(mockMaterial);
+    });
+
+    test('should return created material', async () => {
+        const material = {
+            type: 'nails',
+            coveragePerUnit: 200,
+        };
+    
+        const mockMaterial = { id: 1, type: 'nails', coveragePerUnit: 200 };
+    
+        const materialRepository = {
+          save: jest.fn().mockResolvedValue(mockMaterial),
+        };
+    
+        const dataSource = appDataSource.getRepository as jest.Mock;
+        dataSource.mockImplementationOnce(() => materialRepository);
+    
+        const response = await request(app).post('/materials').send(material);
+    
+        expect(response.status).toBe(201);
+        expect(response.body).toEqual(mockMaterial);
     });
 });
